@@ -1,0 +1,21 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - npm install -g aws-cdk
+      - npm install -g typescript
+      - cdk --version
+  pre_build:
+    commands:
+      - echo aws version...
+      - aws --version
+  build:
+    commands:
+      - echo Deploy started...
+      - echo Build CDK project...
+      - npm install
+      - npm run build
+      - npx cdk bootstrap aws://321325872726/us-east-1
+      #- cdk deploy Scout-APP-stack --require-approval never
+      - cdk destroy Scout-APP-stack --force
+      - echo Deploy completed...

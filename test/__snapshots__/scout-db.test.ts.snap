@@ -1,0 +1,402 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test DB scout stack snapshot 1`] = `
+Object {
+  "Parameters": Object {
+    "SsmParameterValuePGRSTDBANONROLEC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_DB_ANON_ROLE",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePGRSTDBSCHEMAC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_DB_SCHEMA",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePGRSTDBURIC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_DB_URI",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePGRSTJWTSECRETC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_JWT_SECRET",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePGRSTSECRETISBASE64C96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_SECRET_IS_BASE64",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePOSTGRESAUTHROLEC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "POSTGRES_AUTH_ROLE",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePOSTGRESDBC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "POSTGRES_DB",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePOSTGRESPASSWORDC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "POSTGRES_PASSWORD",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuepostgresdbimageC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "postgresdbimage",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuescoutapiimageC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "scoutapi-image",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuescoutimageC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "scoutimage",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": Object {
+    "ImportedECSSGfromScoutDBTestStackimportedALBSecurityGroup677031D13000D250610D": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::ImportValue": "ecssg",
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::ImportValue": "albsg",
+        },
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "LogGroupscoutdb0311533D": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "LogGroupName": "/ecs/scout-app-postgrest-ecs-task-def",
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ScoutDBSGBackEnd3EB41EAB": Object {
+      "Properties": Object {
+        "GroupDescription": "Default/ScoutDBTestStack/ScoutDB-SG-BackEnd",
+        "GroupName": "scout-prod-db-sg",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "128.229.4.0/24",
+            "Description": "Allow https traffic",
+            "FromPort": 5432,
+            "IpProtocol": "tcp",
+            "ToPort": 5432,
+          },
+          Object {
+            "CidrIp": "108.48.153.254/32",
+            "Description": "Allow https traffic",
+            "FromPort": 5432,
+            "IpProtocol": "tcp",
+            "ToPort": 5432,
+          },
+          Object {
+            "CidrIp": "128.229.67.14/32",
+            "Description": "Allow https traffic",
+            "FromPort": 5432,
+            "IpProtocol": "tcp",
+            "ToPort": 5432,
+          },
+          Object {
+            "CidrIp": "136.226.18.0/24",
+            "Description": "Allow https traffic",
+            "FromPort": 5432,
+            "IpProtocol": "tcp",
+            "ToPort": 5432,
+          },
+          Object {
+            "CidrIp": "156.80.4.0/24",
+            "Description": "Allow https traffic",
+            "FromPort": 5432,
+            "IpProtocol": "tcp",
+            "ToPort": 5432,
+          },
+        ],
+        "VpcId": "vpc-12345",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ScoutDBSGBackEndfromScoutDBTestStackImportedECSSG61E262F95432B8C62E47": Object {
+      "Properties": Object {
+        "Description": "from ScoutDBTestStackImportedECSSG61E262F9:5432",
+        "FromPort": 5432,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ScoutDBSGBackEnd3EB41EAB",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::ImportValue": "ecssg",
+        },
+        "ToPort": 5432,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "importedALBSecurityGroupfrom000003000C5CA4B05": Object {
+      "Properties": Object {
+        "CidrIp": "0.0.0.0/0",
+        "Description": "Allow from anyone on port 3000",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::ImportValue": "albsg",
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "importedALBalbdbhttplistener26DC6FBC": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "scoutdbtargetgroup8590F501",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Fn::ImportValue": "albarn",
+        },
+        "Port": 3000,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "scoutdbtargetgroup8590F501": Object {
+      "Properties": Object {
+        "HealthCheckPath": "/",
+        "HealthCheckProtocol": "HTTP",
+        "Name": "app-scout-prod-postgrestdb",
+        "Port": 5432,
+        "Protocol": "HTTP",
+        "TargetType": "ip",
+        "VpcId": "vpc-12345",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "scoutpgecsserviceServiceE18424B9": Object {
+      "DependsOn": Array [
+        "importedALBalbdbhttplistener26DC6FBC",
+      ],
+      "Properties": Object {
+        "Cluster": "app-scout-prod-ecs-cluster",
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DesiredCount": 0,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "scout-prod-postgrest",
+            "ContainerPort": 3000,
+            "TargetGroupArn": Object {
+              "Ref": "scoutdbtargetgroup8590F501",
+            },
+          },
+        ],
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::ImportValue": "ecssg",
+              },
+            ],
+            "Subnets": Array [
+              "s-12345",
+              "s-67890",
+            ],
+          },
+        },
+        "ServiceName": "scout-prod-pg-ecs-service",
+        "TaskDefinition": Object {
+          "Ref": "tdpostgrestdbBAB7FB89",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "scoutpgecsserviceTaskCountTarget30E4AC76": Object {
+      "Properties": Object {
+        "MaxCapacity": 2,
+        "MinCapacity": 0,
+        "ResourceId": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "service/app-scout-prod-ecs-cluster/",
+              Object {
+                "Fn::GetAtt": Array [
+                  "scoutpgecsserviceServiceE18424B9",
+                  "Name",
+                ],
+              },
+            ],
+          ],
+        },
+        "RoleARN": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":iam::321325872726:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+            ],
+          ],
+        },
+        "ScalableDimension": "ecs:service:DesiredCount",
+        "ServiceNamespace": "ecs",
+      },
+      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+    },
+    "scoutpgecsserviceTaskCountTargetScaleUpCPUBackEnd6FE95615": Object {
+      "Properties": Object {
+        "PolicyName": "ScoutDBTestStackscoutpgecsserviceTaskCountTargetScaleUpCPUBackEndCA741356",
+        "PolicyType": "TargetTrackingScaling",
+        "ScalingTargetId": Object {
+          "Ref": "scoutpgecsserviceTaskCountTarget30E4AC76",
+        },
+        "TargetTrackingScalingPolicyConfiguration": Object {
+          "PredefinedMetricSpecification": Object {
+            "PredefinedMetricType": "ECSServiceAverageCPUUtilization",
+          },
+          "TargetValue": 75,
+        },
+      },
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+    },
+    "scoutpgecsserviceTaskCountTargetScaleUpMemBackEnd75C66927": Object {
+      "Properties": Object {
+        "PolicyName": "ScoutDBTestStackscoutpgecsserviceTaskCountTargetScaleUpMemBackEndA08EDB00",
+        "PolicyType": "TargetTrackingScaling",
+        "ScalingTargetId": Object {
+          "Ref": "scoutpgecsserviceTaskCountTarget30E4AC76",
+        },
+        "TargetTrackingScalingPolicyConfiguration": Object {
+          "PredefinedMetricSpecification": Object {
+            "PredefinedMetricType": "ECSServiceAverageMemoryUtilization",
+          },
+          "TargetValue": 75,
+        },
+      },
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+    },
+    "tdpostgrestdbBAB7FB89": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Environment": Array [
+              Object {
+                "Name": "PGRST_DB_ANON_ROLE",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTDBANONROLEC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "PGRST_DB_SCHEMA",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTDBSCHEMAC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "PGRST_DB_URI",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTDBURIC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "PGRST_JWT_SECRET",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTJWTSECRETC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "PGRST_SECRET_IS_BASE64",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTSECRETISBASE64C96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "POSTGRES_AUTH_ROLE",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePOSTGRESAUTHROLEC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "POSTGRES_DB",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePOSTGRESDBC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "POSTGRES_PASSWORD",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePOSTGRESPASSWORDC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+            ],
+            "Essential": true,
+            "Image": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "321325872726.dkr.ecr.us-east-1.",
+                  Object {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/ecr-metalapp:latest",
+                ],
+              ],
+            },
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "LogGroupscoutdb0311533D",
+                },
+                "awslogs-region": "us-east-1",
+                "awslogs-stream-prefix": "ecs",
+              },
+            },
+            "Memory": 512,
+            "Name": "scout-prod-postgrest",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 3000,
+                "HostPort": 3000,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": "arn:aws:iam::321325872726:role/ecsTaskExecutionRole",
+        "Family": "scout-prod-postgrest-ecs-task-def",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "FARGATE",
+        ],
+        "TaskRoleArn": "arn:aws:iam::321325872726:role/ecsTaskExecutionRole",
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+  },
+}
+`;

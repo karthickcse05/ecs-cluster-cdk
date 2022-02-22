@@ -1,0 +1,826 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test app scout stack snapshot 1`] = `
+Object {
+  "Outputs": Object {
+    "ServiceLoadBalancerDNSEC5B149E": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "ServiceLBE9A1ADBC",
+          "DNSName",
+        ],
+      },
+    },
+    "ServiceServiceURL250C0FB6": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "ServiceLBE9A1ADBC",
+                "DNSName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+    "albsg": Object {
+      "Export": Object {
+        "Name": "albsg",
+      },
+      "Value": "sg-074de470add30d74a",
+    },
+    "devecsserviceALB": Object {
+      "Export": Object {
+        "Name": "Scout-ecs-dev-alb",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "alb8A8B13C2",
+                "DNSName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+    "ecssg": Object {
+      "Export": Object {
+        "Name": "ecssg",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "scoutappSG0ECC9C3C",
+          "GroupId",
+        ],
+      },
+    },
+    "importingalb": Object {
+      "Export": Object {
+        "Name": "albarn",
+      },
+      "Value": Object {
+        "Ref": "alb8A8B13C2",
+      },
+    },
+  },
+  "Parameters": Object {
+    "SsmParameterValuePGRSTDBANONROLEC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_DB_ANON_ROLE",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePGRSTDBSCHEMAC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_DB_SCHEMA",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePGRSTDBURIC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_DB_URI",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePGRSTJWTSECRETC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_JWT_SECRET",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePGRSTSECRETISBASE64C96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "PGRST_SECRET_IS_BASE64",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePOSTGRESAUTHROLEC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "POSTGRES_AUTH_ROLE",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePOSTGRESDBC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "POSTGRES_DB",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuePOSTGRESPASSWORDC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "POSTGRES_PASSWORD",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuealbsgC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "albsg",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValuemessageC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "message",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": Object {
+    "LogGroupTest35764128": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "LogGroupName": "/ecs/scout-app-ecs-task-def",
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ScoutDevClusterA4270C77": Object {
+      "Properties": Object {
+        "ClusterName": "app-scout-prod-ecs-cluster",
+        "ClusterSettings": Array [
+          Object {
+            "Name": "containerInsights",
+            "Value": "enabled",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "Service9571FDD8": Object {
+      "DependsOn": Array [
+        "ServiceLBPublicListenerECSGroup0CC8688C",
+        "ServiceLBPublicListener46709EAA",
+      ],
+      "Properties": Object {
+        "Cluster": Object {
+          "Ref": "ScoutDevClusterA4270C77",
+        },
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "scout-prod-scout-app",
+            "ContainerPort": 8000,
+            "TargetGroupArn": Object {
+              "Ref": "ServiceLBPublicListenerECSGroup0CC8688C",
+            },
+          },
+        ],
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "scoutappSG0ECC9C3C",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": Array [
+              "s-12345",
+              "s-67890",
+            ],
+          },
+        },
+        "ServiceName": "scout-prod-ecs-service",
+        "TaskDefinition": Object {
+          "Ref": "TaskDefinitionsimplehttpBE59A3F2",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "ServiceLBE9A1ADBC": Object {
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ServiceLBSecurityGroupF7435A5C",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Array [
+          "s-12345",
+          "s-67890",
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "ServiceLBPublicListener46709EAA": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "ServiceLBPublicListenerECSGroup0CC8688C",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "ServiceLBE9A1ADBC",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "ServiceLBPublicListenerECSGroup0CC8688C": Object {
+      "Properties": Object {
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetType": "ip",
+        "VpcId": "vpc-12345",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "ServiceLBSecurityGroupF7435A5C": Object {
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB ECSClusterTestStackServiceLBF71FD3FD",
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "VpcId": "vpc-12345",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ServiceLBSecurityGrouptoECSClusterTestStackscoutappSG896577E0800079737D6E": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "FromPort": 8000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ServiceLBSecurityGroupF7435A5C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 8000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "ServiceTaskCountTargetCpuScaling4BCDA6AE": Object {
+      "Properties": Object {
+        "PolicyName": "ECSClusterTestStackServiceTaskCountTargetCpuScaling8739A3E9",
+        "PolicyType": "TargetTrackingScaling",
+        "ScalingTargetId": Object {
+          "Ref": "ServiceTaskCountTargetDF7542A8",
+        },
+        "TargetTrackingScalingPolicyConfiguration": Object {
+          "PredefinedMetricSpecification": Object {
+            "PredefinedMetricType": "ECSServiceAverageCPUUtilization",
+          },
+          "TargetValue": 50,
+        },
+      },
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+    },
+    "ServiceTaskCountTargetDF7542A8": Object {
+      "Properties": Object {
+        "MaxCapacity": 20,
+        "MinCapacity": 1,
+        "ResourceId": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "service/",
+              Object {
+                "Ref": "ScoutDevClusterA4270C77",
+              },
+              "/",
+              Object {
+                "Fn::GetAtt": Array [
+                  "Service9571FDD8",
+                  "Name",
+                ],
+              },
+            ],
+          ],
+        },
+        "RoleARN": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":iam::321325872726:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+            ],
+          ],
+        },
+        "ScalableDimension": "ecs:service:DesiredCount",
+        "ServiceNamespace": "ecs",
+      },
+      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+    },
+    "ServiceTaskCountTargetMemoryScaling502AB098": Object {
+      "Properties": Object {
+        "PolicyName": "ECSClusterTestStackServiceTaskCountTargetMemoryScalingCBEEA7CF",
+        "PolicyType": "TargetTrackingScaling",
+        "ScalingTargetId": Object {
+          "Ref": "ServiceTaskCountTargetDF7542A8",
+        },
+        "TargetTrackingScalingPolicyConfiguration": Object {
+          "PredefinedMetricSpecification": Object {
+            "PredefinedMetricType": "ECSServiceAverageMemoryUtilization",
+          },
+          "TargetValue": 50,
+        },
+      },
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+    },
+    "TaskDefinitionsimplehttpBE59A3F2": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Essential": true,
+            "Image": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "321325872726.dkr.ecr.us-east-1.",
+                  Object {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/ecr-simplehttp:1.0",
+                ],
+              ],
+            },
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "LogGroupTest35764128",
+                },
+                "awslogs-region": "us-east-1",
+                "awslogs-stream-prefix": "ecs",
+              },
+            },
+            "Memory": 512,
+            "Name": "scout-prod-scout-app",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 8000,
+                "HostPort": 8000,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+          Object {
+            "Cpu": 256,
+            "Environment": Array [
+              Object {
+                "Name": "message",
+                "Value": Object {
+                  "Ref": "SsmParameterValuemessageC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "PGRST_DB_ANON_ROLE",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTDBANONROLEC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "PGRST_DB_SCHEMA",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTDBSCHEMAC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "PGRST_DB_URI",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTDBURIC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "PGRST_JWT_SECRET",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTJWTSECRETC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "PGRST_SECRET_IS_BASE64",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePGRSTSECRETISBASE64C96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "POSTGRES_AUTH_ROLE",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePOSTGRESAUTHROLEC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "POSTGRES_DB",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePOSTGRESDBC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+              Object {
+                "Name": "POSTGRES_PASSWORD",
+                "Value": Object {
+                  "Ref": "SsmParameterValuePOSTGRESPASSWORDC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
+              },
+            ],
+            "Essential": true,
+            "Image": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "321325872726.dkr.ecr.us-east-1.",
+                  Object {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/ecr-metalapp:latest",
+                ],
+              ],
+            },
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "LogGroupTest35764128",
+                },
+                "awslogs-region": "us-east-1",
+                "awslogs-stream-prefix": "ecs",
+              },
+            },
+            "Memory": 512,
+            "Name": "scout-prod-postgrest-api",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 3000,
+                "HostPort": 3000,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+        ],
+        "Cpu": "512",
+        "ExecutionRoleArn": "arn:aws:iam::321325872726:role/ecsTaskExecutionRole",
+        "Family": "scout-prod-ecs-task-def",
+        "Memory": "1024",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "FARGATE",
+        ],
+        "TaskRoleArn": "arn:aws:iam::321325872726:role/ecsTaskExecutionRole",
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "alb8A8B13C2": Object {
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Name": "app-scout-prod-alb",
+        "Scheme": "internet-facing",
+        "SecurityGroups": Array [
+          "sg-074de470add30d74a",
+        ],
+        "Subnets": Array [
+          "s-12345",
+          "s-67890",
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "albalbhttplistenerE2CBF17B": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "scouthttptargetgroup5C634259",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "alb8A8B13C2",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "scoutappSG0ECC9C3C": Object {
+      "Properties": Object {
+        "GroupDescription": "Default/ECSClusterTestStack/scoutapp-SG",
+        "GroupName": "scout-app-sg",
+        "VpcId": "vpc-12345",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "scoutappSGfrom108481532543230000B7D8F10": Object {
+      "Properties": Object {
+        "CidrIp": "108.48.153.254/32",
+        "Description": "Allow http traffic",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom10848153254328020FCC70D": Object {
+      "Properties": Object {
+        "CidrIp": "108.48.153.254/32",
+        "Description": "Allow http traffic",
+        "FromPort": 80,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom12822940243000EFCCC71A": Object {
+      "Properties": Object {
+        "CidrIp": "128.229.4.0/24",
+        "Description": "Allow http traffic",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom128229402480DADCF75F": Object {
+      "Properties": Object {
+        "CidrIp": "128.229.4.0/24",
+        "Description": "Allow http traffic",
+        "FromPort": 80,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom1282296714323000B5A6A6AC": Object {
+      "Properties": Object {
+        "CidrIp": "128.229.67.14/32",
+        "Description": "Allow http traffic",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom12822967143280B7B15C3C": Object {
+      "Properties": Object {
+        "CidrIp": "128.229.67.14/32",
+        "Description": "Allow http traffic",
+        "FromPort": 80,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom1362261802430000690A1F7": Object {
+      "Properties": Object {
+        "CidrIp": "136.226.18.0/24",
+        "Description": "Allow http traffic",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom13622618024801CB3C981": Object {
+      "Properties": Object {
+        "CidrIp": "136.226.18.0/24",
+        "Description": "Allow http traffic",
+        "FromPort": 80,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom1588040243000A402A09F": Object {
+      "Properties": Object {
+        "CidrIp": "158.80.4.0/24",
+        "Description": "Allow http traffic",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom15880402480CB4F4883": Object {
+      "Properties": Object {
+        "CidrIp": "158.80.4.0/24",
+        "Description": "Allow http traffic",
+        "FromPort": 80,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom17231001630002AEE804C": Object {
+      "Properties": Object {
+        "CidrIp": "172.31.0.0/16",
+        "Description": "Allow http traffic",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom172310016802C0F920A": Object {
+      "Properties": Object {
+        "CidrIp": "172.31.0.0/16",
+        "Description": "Allow http traffic",
+        "FromPort": 80,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom7116318218323000E16AB3AF": Object {
+      "Properties": Object {
+        "CidrIp": "71.163.18.218/32",
+        "Description": "Allow http traffic",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfrom71163182183280B2FFF619": Object {
+      "Properties": Object {
+        "CidrIp": "71.163.18.218/32",
+        "Description": "Allow http traffic",
+        "FromPort": 80,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfromECSClusterTestStackSGA0EE9013ALLPORTS794CA078": Object {
+      "Properties": Object {
+        "Description": "from ECSClusterTestStackSGA0EE9013:ALL PORTS",
+        "FromPort": 0,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": "sg-074de470add30d74a",
+        "ToPort": 65535,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGfromECSClusterTestStackServiceLBSecurityGroup2C71137F8000EA1F677B": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 8000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ServiceLBSecurityGroupF7435A5C",
+            "GroupId",
+          ],
+        },
+        "ToPort": 8000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "scoutappSGto00000ALLTRAFFICB84F64DF": Object {
+      "Properties": Object {
+        "CidrIp": "0.0.0.0/0",
+        "Description": "Allow all outbound traffic by default",
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "scoutappSG0ECC9C3C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "scouthttptargetgroup5C634259": Object {
+      "Properties": Object {
+        "HealthCheckPath": "/filters",
+        "HealthCheckProtocol": "HTTP",
+        "Name": "app-scout-prod-tg",
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetType": "ip",
+        "VpcId": "vpc-12345",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+  },
+}
+`;

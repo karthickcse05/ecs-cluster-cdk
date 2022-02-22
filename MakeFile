@@ -1,0 +1,68 @@
+PROFILE = awssbx
+ENV = sbx
+.DEFAULT_GOAL := explain
+.PHONY: explain
+explain:
+	###
+	#
+	# Welcome to the AWS Infrastructure Templates repo
+	#
+	##
+
+.PHONY: install
+install: ## Install all the dependencies we need
+	npm install
+
+.PHONY: prepare-environment
+prepare-environment: check-environment
+ifeq ($(wildcard cdk.${ENV}.json),)
+	@echo "[Error] cdk.${ENV}.json does not exist"
+	@exit 1;
+else
+	cp cdk.${ENV}.json cdk.json
+endif
+
+.PHONY: check-environment
+check-environment:
+ifeq ($(ENV),)
+	@echo "[Error] Please specify a ENV"
+	@exit 1;
+endif
+
+.PHONY: deploy-stack 
+deploy-stack:
+	npx cdk deploy --profile $(PROFILE)
+
+
+.PHONY: deploy-app-stack 
+deploy-app-stack: prepare-environment
+	npx cdk deploy Scout-APP-stack --profile $(PROFILE)
+
+.PHONY: deploy-db-stack 
+deploy-db-stack: prepare-environment
+	npx cdk deploy Scout-DB-stack --profile $(PROFILE)
+
+
+.PHONY: destroy-stack 
+destroy-stack: 
+	npx cdk destroy Scout-DB-stack --profile $(PROFILE)
+	npx cdk destroy Scout-APP-stack --profile $(PROFILE)
+
+
+.PHONY: run-synth
+run-synth: 
+	cdk synth --profile ${PROFILE}
+
+.PHONY: test
+test: ## Test the application
+	npm run build && npm test
+
+
+.PHONY: snapshottestfix
+snapshottestfix: ## To commit to the new snapshot
+	npm run build && npm test -- -u
+
+
+.PHONY: test-cov
+test-cov: ## Test the stack and produce the coverage
+	npm run build && npm run test-cov
